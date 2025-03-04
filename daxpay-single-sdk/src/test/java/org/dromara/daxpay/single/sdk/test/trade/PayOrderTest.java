@@ -71,9 +71,9 @@ public class PayOrderTest {
         param.setAmount(BigDecimal.valueOf(0.01));
         param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.BARCODE.getCode());
+        param.setAuthCode("131513396074955617");
 
         WechatPayParam wechatPayParam = new WechatPayParam();
-        wechatPayParam.setAuthCode("131513396074955617");
         param.setExtraParam(JsonUtil.toJsonStr(wechatPayParam));
         param.setAttach("{回调参数}");
         param.setAllocation(false);
@@ -190,9 +190,9 @@ public class PayOrderTest {
         param.setAmount(BigDecimal.valueOf(1));
         param.setChannel(ChannelEnum.ALI.getCode());
         param.setMethod(PayMethodEnum.BARCODE.getCode());
+        param.setAuthCode("287109871028487115");
 
         AlipayParam alipayParam = new AlipayParam();
-        alipayParam.setAuthCode("287109871028487115");
         param.setExtraParam(JsonUtil.toJsonStr(alipayParam));
 
         param.setAttach("{回调参数}");

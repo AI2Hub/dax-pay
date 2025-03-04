@@ -60,6 +60,10 @@ public class PayParam extends DaxPayRequest<PayResultModel> {
     /** 支付金额 */
     private BigDecimal amount;
 
+    /** 授权码(主动扫描用户的付款码) */
+    private String authCode;
+
+
     /**
      * 支付扩展参数, json字符串格式
      * @see AlipayParam

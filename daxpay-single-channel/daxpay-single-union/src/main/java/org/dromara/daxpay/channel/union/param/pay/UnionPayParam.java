@@ -12,7 +12,4 @@ import lombok.Data;
 @Schema(title = "云闪付支付参数")
 public class UnionPayParam {
 
-    @Schema(description = "授权码(主动扫描用户的付款码)")
-    private String authCode;
-
 }

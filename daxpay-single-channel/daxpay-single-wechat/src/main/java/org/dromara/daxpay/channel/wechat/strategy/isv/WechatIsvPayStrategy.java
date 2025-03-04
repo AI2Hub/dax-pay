@@ -69,9 +69,9 @@ public class WechatIsvPayStrategy extends AbsPayStrategy {
     @Override
     public PayResultBo doPayHandler() {
         if (Objects.equals(wechatPayConfig.getApiVersion(), WechatPayCode.API_V2)){
-            return wechatPayV2Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
+            return wechatPayV2Service.pay(getOrder(), this.getPayParam(), wechatPayParam, wechatPayConfig);
         } else {
-            return wechatPayV3Service.pay(getOrder(), wechatPayParam, wechatPayConfig);
+            return wechatPayV3Service.pay(getOrder(), this.getPayParam(), wechatPayParam, wechatPayConfig);
         }
     }
 }

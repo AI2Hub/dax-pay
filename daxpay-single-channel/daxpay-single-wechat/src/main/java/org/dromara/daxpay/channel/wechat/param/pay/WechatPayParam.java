@@ -24,7 +24,4 @@ public class WechatPayParam {
     @Schema(description = "openid类型")
     private String openIdType;
 
-    @Schema(description = "授权码(主动扫描用户的付款码)")
-    private String authCode;
-
 }

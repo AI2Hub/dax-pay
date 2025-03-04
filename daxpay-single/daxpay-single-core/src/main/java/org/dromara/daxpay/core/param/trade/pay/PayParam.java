@@ -78,6 +78,11 @@ public class PayParam extends PaymentCommonParam {
     @Digits(integer = 8, fraction = 2, message = "支付金额精度到分, 且要小于一亿元")
     private BigDecimal amount;
 
+    /** 授权码(主动扫描用户的付款码) */
+    @Size(max = 128, message = "授权码不可超过128位")
+    @Schema(description = "付款码")
+    private String authCode;
+
     /**
      * 支付扩展参数
      */

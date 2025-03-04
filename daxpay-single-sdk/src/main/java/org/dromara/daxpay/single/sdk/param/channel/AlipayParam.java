@@ -13,10 +13,6 @@ import org.dromara.daxpay.single.sdk.param.ChannelParam;
 @Accessors(chain = true)
 public class AlipayParam implements ChannelParam {
 
-    /**
-     * 授权码(主动扫描用户的付款码)
-     */
-    private String authCode;
 
     /**
      * 【描述】小程序支付中，商户实际经营主体的小程序应用的appid，也即最终唤起收银台支付所在的小程序的应用id

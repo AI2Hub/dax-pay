@@ -45,7 +45,7 @@ public class WechatPayService {
         }
         // 付款码支付
         if (Objects.equals(payParam.getMethod(), PayMethodEnum.BARCODE.getCode())){
-            if (Objects.isNull(wechatPayParam.getAuthCode())) {
+            if (Objects.isNull(payParam.getAuthCode())) {
                 throw new ValidationFailedException("微信付款码支付必须传入付款码参数");
             }
         }

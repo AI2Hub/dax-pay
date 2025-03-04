@@ -11,6 +11,7 @@ import org.dromara.daxpay.core.enums.PayMethodEnum;
 import org.dromara.daxpay.core.enums.PayStatusEnum;
 import org.dromara.daxpay.core.exception.MethodNotExistException;
 import org.dromara.daxpay.core.exception.TradeFailException;
+import org.dromara.daxpay.core.param.trade.pay.PayParam;
 import org.dromara.daxpay.core.result.trade.pay.PaySyncResult;
 import org.dromara.daxpay.core.util.PayUtil;
 import org.dromara.daxpay.service.bo.trade.PayResultBo;
@@ -55,9 +56,9 @@ public class WechatPaySubV2Service {
     /**
      * 调起支付
      */
-    public PayResultBo pay(PayOrder payOrder, WechatPayParam wechatPayParam, WechatPayConfig config) {
+    public PayResultBo pay(PayOrder payOrder, PayParam payParam, WechatPayParam wechatPayParam, WechatPayConfig config) {
         PayResultBo payInfo = new PayResultBo();
-        String payBody = null;
+        String payBody;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
 
         // wap支付
@@ -78,7 +79,7 @@ public class WechatPaySubV2Service {
         }
         // 付款码支付
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
-            this.barCodePay(payOrder, wechatPayParam.getAuthCode(), config, payInfo);
+            this.barCodePay(payOrder, payParam.getAuthCode(), config, payInfo);
             return payInfo;
         } else {
             throw new MethodNotExistException("不支持的支付方式");

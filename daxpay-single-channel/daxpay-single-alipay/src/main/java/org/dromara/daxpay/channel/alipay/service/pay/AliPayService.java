@@ -1,17 +1,6 @@
 package org.dromara.daxpay.channel.alipay.service.pay;
 
 import cn.bootx.platform.core.util.BigDecimalUtil;
-import org.dromara.daxpay.channel.alipay.code.AlipayCode;
-import org.dromara.daxpay.channel.alipay.entity.AliPayConfig;
-import org.dromara.daxpay.channel.alipay.param.pay.AlipayParam;
-import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
-import org.dromara.daxpay.core.enums.PayMethodEnum;
-import org.dromara.daxpay.core.exception.AmountExceedLimitException;
-import org.dromara.daxpay.core.exception.TradeFailException;
-import org.dromara.daxpay.core.param.trade.pay.PayParam;
-import org.dromara.daxpay.core.util.PayUtil;
-import org.dromara.daxpay.service.bo.trade.PayResultBo;
-import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -25,6 +14,17 @@ import com.alipay.api.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.daxpay.channel.alipay.code.AlipayCode;
+import org.dromara.daxpay.channel.alipay.entity.AliPayConfig;
+import org.dromara.daxpay.channel.alipay.param.pay.AlipayParam;
+import org.dromara.daxpay.channel.alipay.service.config.AlipayConfigService;
+import org.dromara.daxpay.core.enums.PayMethodEnum;
+import org.dromara.daxpay.core.exception.AmountExceedLimitException;
+import org.dromara.daxpay.core.exception.TradeFailException;
+import org.dromara.daxpay.core.param.trade.pay.PayParam;
+import org.dromara.daxpay.core.util.PayUtil;
+import org.dromara.daxpay.service.bo.trade.PayResultBo;
+import org.dromara.daxpay.service.entity.order.pay.PayOrder;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +57,7 @@ public class AliPayService {
     /**
      * 调起支付
      */
-    public PayResultBo pay(PayOrder payOrder, AlipayParam aliPayParam, AliPayConfig aliPayConfig) {
+    public PayResultBo pay(PayOrder payOrder, PayParam payParam, AlipayParam aliPayParam, AliPayConfig aliPayConfig) {
         String amount = PayUtil.toDecimal(payOrder.getAmount()).toString();
         String payBody = null;
         // 异步线程存储
@@ -84,7 +84,7 @@ public class AliPayService {
         }
         // 付款码支付, 付款码存在直接支付成功的情况, 所以返回结果特殊处理
         else if (Objects.equals(payOrder.getMethod(), PayMethodEnum.BARCODE.getCode())) {
-            this.barCode(amount, payOrder, aliPayParam, payResult, aliPayConfig);
+            this.barCode(amount, payOrder, payParam.getAuthCode(), payResult, aliPayConfig);
             return payResult;
         }
         // 通常是发起支付的参数
@@ -95,7 +95,6 @@ public class AliPayService {
     /**
      * wap支付
      */
-    @SneakyThrows
     public String wapPay(String amount, PayOrder payOrder, AliPayConfig aliPayConfig) {
         // 获取支付宝客户端
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
@@ -139,7 +138,6 @@ public class AliPayService {
     /**
      * app支付
      */
-    @SneakyThrows
     public String appPay(String amount, PayOrder payOrder, AliPayConfig aliPayConfig) {
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
@@ -176,7 +174,6 @@ public class AliPayService {
     /**
      * PC支付
      */
-    @SneakyThrows
     public String webPay(String amount, PayOrder payOrder, AliPayConfig aliPayConfig) {
         // 获取支付宝客户端
         AlipayClient alipayClient = aliPayConfigService.getAlipayClient(aliPayConfig);
@@ -263,7 +260,6 @@ public class AliPayService {
     /**
      * 二维码支付(扫码支付)
      */
-    @SneakyThrows
     public String qrCodePay(String amount, PayOrder payOrder, AliPayConfig aliPayConfig) {
         AlipayTradePrecreateModel model = new AlipayTradePrecreateModel();
         model.setSubject(payOrder.getTitle());
@@ -298,13 +294,12 @@ public class AliPayService {
     /**
      * 付款码支付
      */
-    @SneakyThrows
-    public void barCode(String amount, PayOrder payOrder, AlipayParam aliPayParam, PayResultBo result, AliPayConfig aliPayConfig) {
+    public void barCode(String amount, PayOrder payOrder, String authCode, PayResultBo result, AliPayConfig aliPayConfig) {
         AlipayTradePayModel model = new AlipayTradePayModel();
         model.setSubject(payOrder.getTitle());
         model.setOutTradeNo(payOrder.getOrderNo());
         model.setScene(AlipayCode.Products.BAR_CODE);
-        model.setAuthCode(aliPayParam.getAuthCode());
+        model.setAuthCode(authCode);
         // 是否分账
         if (payOrder.getAllocation()){
             ExtendParams extendParams = new ExtendParams();

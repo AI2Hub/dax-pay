@@ -69,7 +69,7 @@ public class WechatCheckoutStrategy extends AbsCheckoutStrategy {
     public void handlePayParam(CheckoutPayParam checkoutPayParam, PayParam payParam) {
         WechatPayParam wechatPayParam = new WechatPayParam();
         wechatPayParam.setOpenId(checkoutPayParam.getOpenId());
-        wechatPayParam.setAuthCode(checkoutPayParam.getBarCode());
+        payParam.setAuthCode(checkoutPayParam.getBarCode());
         payParam.setExtraParam(JSONUtil.toJsonStr(wechatPayParam));
     }
 

@@ -53,7 +53,7 @@ public class UnionPayService {
     /**
      * 支付接口
      */
-    public PayResultBo pay(PayOrder payOrder, UnionPayParam unionPayParam, UnionPayKit unionPayKit){
+    public PayResultBo pay(PayOrder payOrder, PayParam payParam, UnionPayParam unionPayParam, UnionPayKit unionPayKit){
         BigDecimal totalFee = payOrder.getAmount();
         String payBody = null;
         PayMethodEnum payMethodEnum = PayMethodEnum.findByCode(payOrder.getMethod());
@@ -64,7 +64,7 @@ public class UnionPayService {
         }
         // 付款码支付
         else if (payMethodEnum == PayMethodEnum.BARCODE) {
-            this.barCodePay(totalFee, payOrder, unionPayParam.getAuthCode(), unionPayKit);
+            this.barCodePay(totalFee, payOrder, payParam.getAuthCode(), unionPayKit);
         }
         // APP支付
         else if (payMethodEnum == PayMethodEnum.APP) {

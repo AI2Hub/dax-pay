@@ -68,6 +68,6 @@ public class AlipayIsvPayStrategy extends AbsPayStrategy {
      */
     @Override
     public PayResultBo doPayHandler() {
-        return aliPayService.pay(this.getOrder(), this.aliPayParam,aliPayConfig);
+        return aliPayService.pay(this.getOrder(), this.getPayParam(), this.aliPayParam,aliPayConfig);
     }
 }
