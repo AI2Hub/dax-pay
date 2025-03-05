@@ -83,7 +83,7 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         return this.lambdaQuery()
                 .eq(RefundOrder::getChannel, channel)
                 .between(RefundOrder::getFinishTime, startTime, endTime)
-                .eq(RefundOrder::getStatus, RefundStatusEnum.SUCCESS)
+                .eq(RefundOrder::getStatus, RefundStatusEnum.SUCCESS.getCode())
                 .list();
     }
 
